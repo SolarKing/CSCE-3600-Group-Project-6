@@ -7,6 +7,7 @@
 #include <iostream>
 #include <cstdlib>
 #include <string>
+#include <typeinfo>
 
 // try to avoid using namespace std
 
@@ -15,7 +16,7 @@ int main(int argc, char const *argv[])
   for (int i = 1; i < argc; i++)
   {
     std::cout << argv[i] << std::endl;
-    
+
     if (argv[i] == std::string("-sizeL1"))
     {
       std::cout << "debug: entered into argument -sizeL1 condition" << std::endl;

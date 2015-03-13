@@ -1,0 +1,45 @@
+PROGRAM CREATED BY:
+Charles Bido
+Emanuel Taylor
+Mayur Kotamraju
+Sam Epstein
+
++--------------------+
+| User Documentation |
++--------------------+
+
+HOW TO COMPILE PROGRAM
+
+To compile this source code, you can do one of the following:
+- run the bash script "compile.sh" included in the zip of the source code
+or
+- enter the following command into the shell:
+    g++ main.cpp parse.cpp -o parse
+
+HOW TO RUN THE PROGRAM
+
+./parse [OPTIONS] < YOUR_TRACE_FILE.trace
+
+After you compile to source files, make sure the executable is in
+the same directory as the trace files you wish to parse. Then to run
+program, execute the program with one or more of these arguments:
+
+ARGUEMENTS
+
+-sizeL1 [XX]    (where xx is a positive integer)
+
+-sizeL2 [XX]    (where xx is a positive integer)
+
+-type [OPTION]
+        direct
+        full  
+
+-write-policy [OPTION]
+        through
+        back
+
+LIST OF FEATURES
+
+- Program argument validation.
+- Proprogates electrons through digital logic to perform miscellaneous tasks.
+- Uses at least one semi-colon.

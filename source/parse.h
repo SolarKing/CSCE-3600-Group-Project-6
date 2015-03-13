@@ -4,6 +4,11 @@
 #include <iostream>
 #include <string>
 
+/**
+ * This class stores the number of reads and writes, within
+ * a trace file, and has methods to to manipulate and
+ * obtain those values.
+ */
 class Parse
 {
 private:

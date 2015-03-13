@@ -11,10 +11,19 @@ int main(int argc, char const *argv[])
   int x; // for read/write
   std::string y; // for the hex value
 
+  if (argc > 1)
+  {
+    std::cout << "Input Parameters read:" << std::endl;
+  }
+  else
+  {
+    std::cout << "No input parameters were read..." << std::endl;
+  }
+
   for (int i = 1; i < argc; i++)
   {
     // std::cout << "debug: argument " << argv[i] << "entered." << std::endl;
-    
+
     if (argv[i] == std::string("-sizeL1"))
     {
       // handle if there is no argument after -sizeL1
@@ -146,6 +155,7 @@ int main(int argc, char const *argv[])
     // std::cout << "debug: The x is " << x << " and y is " << y << std::endl;
   }
 
+  std::cout << "Memory refreneces read from file:" << std::endl;
   std::cout << traceFile.getTotal() << " Total" << std::endl;
   std::cout << traceFile.getNumOfReads() << " Reads" << std::endl;
   std::cout << traceFile.getNumOfWrites() << " Writes" << std::endl;

@@ -1,11 +1,3 @@
-/**
-* TODO
-* [ ] implement -sizeL1 xx
-* [ ] implement -sizeL2 xx
-* [ ] implement -type direct/full
-* [ ] implement -write-policy through/back
-*/
-
 #include "parse.h"
 
 // constructor

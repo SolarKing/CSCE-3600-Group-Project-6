@@ -57,6 +57,15 @@ public:
    * @return This returns new value of nWrites
    */
   int addAWrite();
+
+  /**
+   * This gets the arguments passed into the command line and stores
+   * the value within an instance of the Parse class. 
+   * @param  argc Number of arguments to be read
+   * @param  argv The arguments to be read
+   * @return      Returns 1 for faliure, otherwise return 0
+   */
+  int getArguments(int argc, char const *argv[]);
 };
 
 #endif

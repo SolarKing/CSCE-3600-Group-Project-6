@@ -65,7 +65,7 @@ Here are some resources that can give you a better idea of cache memories:
 
 **Video**
 
-- [Direct apping](https://www.youtube.com/watch?v=VePK5TNgQU8) **NEW**
+- [Direct mapping](https://www.youtube.com/watch?v=VePK5TNgQU8) **NEW**
 - [Direct mapped cache memory](https://www.youtube.com/watch?v=bTj0vFs8ndI)
 - [Memory hierarchy and cache memory lecture](https://www.youtube.com/watch?v=T4VVC3eeZI0)
 

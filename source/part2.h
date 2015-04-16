@@ -54,3 +54,11 @@ void initIntArray(int array[], int array_size, int value);
  * @return             Returns the line position
  */
 int getLinePos(int base12, int cache_lines);
+
+/**
+ * Initialize the values of a type std::string array to a specified string
+ * @param array      Array of type std::string
+ * @param array_size Size of the array
+ * @param value      String value used to initalize each entry in the array
+ */
+void initStringArray(std::string array[], int array_size, std::string value);

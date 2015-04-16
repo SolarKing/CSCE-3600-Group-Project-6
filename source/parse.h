@@ -1,8 +1,9 @@
-#ifndef PARSE_H
-#define PARSE_H
+// #ifndef PARSE_H
+// #define PARSE_H
 
 #include <iostream>
 #include <string>
+#include <vector>
 
 /**
  * This class stores the number of reads and writes, within
@@ -68,4 +69,4 @@ public:
   int getArguments(int argc, char const *argv[]);
 };
 
-#endif
+// #endif

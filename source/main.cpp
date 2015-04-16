@@ -231,7 +231,10 @@ int main(int argc, char const *argv[])
   // }
 
   std::cout << "Hits: " << numOfHits << std::endl;
-  std::cout << "Misses: " << numOfMisses << std::endl;
+  std::cout << "Misses: " << numOfMisses << std::endl << std::endl;
+
+  std::cout << "Hits: " << getPercentage(numOfHits, numOfHits+numOfMisses) << "\%" <<std::endl;
+  std::cout << "Misses: " << getPercentage(numOfMisses, numOfHits+numOfMisses) <<  "\%" << std::endl;
  
   return 0;
 }

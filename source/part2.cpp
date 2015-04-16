@@ -90,3 +90,19 @@ void initStringArray(std::string array[], int array_size, std::string value)
     array[i] = value;
   }
 }
+
+/**
+ * This returns the percentage of a value from a total
+ * @param  value The value that we want the percentage of
+ * @param  total The total (aka 100%)
+ * @return       Return a integer of the percentage
+ */
+float getPercentage(int value, int total)
+{
+  // std::cout << "Value param: " << value << std::endl;
+  // std::cout << "Total param: " << total << std::endl;
+  // std::cout << "Result: " << value / (float)total << std::endl;
+  return value / (float)total * 100;
+}
+
+

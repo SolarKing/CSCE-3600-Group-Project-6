@@ -62,3 +62,12 @@ int getLinePos(int base12, int cache_lines);
  * @param value      String value used to initalize each entry in the array
  */
 void initStringArray(std::string array[], int array_size, std::string value);
+
+/**
+ * This returns the percentage of a value from a total
+ * @param  value The value that we want the percentage of
+ * @param  total The total (aka 100%)
+ * @return       Return a integer of the percentage
+ */
+float getPercentage(int value, int total);
+

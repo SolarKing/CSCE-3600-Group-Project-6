@@ -1,15 +1,20 @@
+
+#include "parse.h"
+#include "part2.h"
+
 #include <iostream>
 #include <cstdlib>
 #include <string>
-
-#include "parse.h"
+#include <bitset>
 
 int main(int argc, char const *argv[])
 {
   Parse traceFile; // this will handle the tracefile
 
+  // storage for the trace file into "main memory"
+
   int x; // for read/write
-  std::string y; // for the hex value
+  int y; // for the hex value
 
   for (int i = 1; i < argc; i++)
   {
@@ -126,11 +131,34 @@ int main(int argc, char const *argv[])
     }
   }
 
-  while (std::cin >> x >> y) // credit to the RIGHT epstein
+  ////////////////////////////
+  // PARSING / PROGRAM FLOW //
+  ////////////////////////////
+
+  std::string tagValue;
+
+  // int cacheSize = 32768;
+  int cacheSize = 16384;
+  int cacheLines = findCacheLines(cacheSize, ADDR_SIZE);
+  int tagSize = findTagSize(ADDR_SIZE, findBitBlockSize(cacheLines), OFFSET);
+
+  while (std::cin >> x) // credit to epstein
   {
+    std::cout << "Cache Lines: " << cacheLines << std::endl;
+    std::cin >> std::hex >> y;
+    std::cout << "Hex Value:" << std::hex << y << std::endl;
+    std::cout << "Decimal Value: " << std::dec << y << std::endl;
+    std::cout << "Binary Value: " << std::bitset<ADDR_SIZE>(y).to_string() << std::endl;
+    
+    tagValue = std::bitset<ADDR_SIZE>(y).to_string().substr(0, tagSize);
+    std::cout << "The LinePos is " << getLinePos(y, cacheLines) << std::endl;
+    std::cout << "Tag Size: " << tagSize << std::endl;
+    std::cout << "Tag Value: " << tagValue << std::endl << std::endl;
+
     if (x == 0) 
     {
       traceFile.addARead();
+
     }
     else if (x == 1)
     {
@@ -150,5 +178,6 @@ int main(int argc, char const *argv[])
   std::cout << traceFile.getNumOfReads() << " Reads" << std::endl;
   std::cout << traceFile.getNumOfWrites() << " Writes" << std::endl;
 
+  
   return 0;
 }

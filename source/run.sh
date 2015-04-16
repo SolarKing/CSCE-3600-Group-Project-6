@@ -1,0 +1,1 @@
+./test -sizeL1 500 -sizeL2 1000 -type direct < small_trace.trace

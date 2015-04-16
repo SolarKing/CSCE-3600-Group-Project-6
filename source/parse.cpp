@@ -42,3 +42,5 @@ int Parse::addAWrite()
   nTotal++;
   return ++nWrites;
 }
+
+

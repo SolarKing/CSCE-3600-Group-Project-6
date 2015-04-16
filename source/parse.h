@@ -1,8 +1,9 @@
-#ifndef PARSE_H
-#define PARSE_H
+// #ifndef PARSE_H
+// #define PARSE_H
 
 #include <iostream>
 #include <string>
+#include <vector>
 
 class Parse
 {
@@ -54,4 +55,4 @@ public:
   int addAWrite();
 };
 
-#endif
+// #endif

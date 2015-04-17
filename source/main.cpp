@@ -6,6 +6,7 @@
 #include <cstdlib>
 #include <string>
 #include <bitset>
+#include <unistd.h> // for sleep()
 
 
 int main(int argc, char const *argv[])
@@ -176,9 +177,34 @@ int main(int argc, char const *argv[])
   // {
   //   std::cout << validArray[i] << std::endl;
   // }
+  // 
+  
+  int loadCounter;
+
+  std::cout << "Loading" << std::flush;
 
   while (std::cin >> x) // credit to epstein
   {
+
+    // loading animation
+    if (loadCounter % 100000 == 25000)
+    {
+      std::cout << "." << std::flush;
+    }
+    else if (loadCounter % 100000 == 50000)
+    {
+      std::cout << "." << std::flush;
+    }
+    else if (loadCounter % 100000 == 75000)
+    {
+      std::cout << "\b\b\b   \b\b\b" << std::flush;
+    }
+    else if (loadCounter % 100000 == 0)
+    {
+      std::cout << "." << std::flush;
+    }
+    loadCounter++;
+
     // std::cout << "Cache Lines: " << cacheLines << std::endl;
     std::cin >> std::hex >> y;
     // std::cout << "Hex Value:" << std::hex << y << std::endl;
@@ -219,7 +245,8 @@ int main(int argc, char const *argv[])
 
     // std::cout << "debug: The x is " << x << " and y is " << y << std::endl;
   }
-
+  std::cout << "\b\b\b\b\b\b\b\b\b\bLoading Done!" << std::endl;
+  std::cout << "--------------------------------------------------------------------------------" << std::endl;
   std::cout << "Memory refreneces read from file:" << std::endl;
   std::cout << traceFile.getTotal() << " Total" << std::endl;
   std::cout << traceFile.getNumOfReads() << " Reads" << std::endl;
@@ -230,10 +257,10 @@ int main(int argc, char const *argv[])
   //   std::cout << tagArray[i] << " " << validArray[i] << std::endl;
   // }
 
-  std::cout << "Hits: " << numOfHits << std::endl;
-  std::cout << "Misses: " << numOfMisses << std::endl << std::endl;
-
-  std::cout << "Hits: " << getPercentage(numOfHits, numOfHits+numOfMisses) << "\%" <<std::endl;
+  // std::cout << "Hits: " << numOfHits << std::endl;
+  // std::cout << "Misses: " << numOfMisses << std::endl << std::endl;
+  std::cout << "--------------------------------------------------------------------------------" << std::endl;
+  std::cout << "  Hits: " << getPercentage(numOfHits, numOfHits+numOfMisses) << "\%" <<std::endl;
   std::cout << "Misses: " << getPercentage(numOfMisses, numOfHits+numOfMisses) <<  "\%" << std::endl;
  
   return 0;

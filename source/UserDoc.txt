@@ -2,7 +2,7 @@ PROGRAM CREATED BY:
 Charles Bido
 Emanuel Taylor
 Mayur Kotamraju
-Sam Epstein
+Samuel Epstein
 
 +--------------------+
 | User Documentation |
@@ -43,3 +43,4 @@ LIST OF FEATURES
 - Program argument validation.
 - Proprogates electrons through digital logic to perform miscellaneous tasks.
 - Uses at least one semi-colon.
+

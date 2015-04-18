@@ -1,5 +1,5 @@
 # CSCE-3600-Group-Project-6
-*for SPRING SEMSTER 2015*
+*for SPRING SEMESTER 2015*
 
 This is the repo for the CSCE 3600 Group Project (Group 6)
 
@@ -19,11 +19,11 @@ located close to the main processor. Cache speeds up the overall system performa
 to its small capacity, not all data can be stored in cache.
 
 Therefore, selected pieces of information (usually the most-used data) are stored there. The overall
-goal for this project is to create a tool that simulates cache memory's behavior usint a memory trace.
+goal for this project is to create a tool that simulates cache memory's behavior using a memory trace.
 
 The trace gives:
 
-1. a memory refrence and 
+1. a memory reference and 
 2. whether this memeory reference is being read or written.
 
 With this information, you will simulate the cache's behavior, not the cache itself.
@@ -31,7 +31,7 @@ With this information, you will simulate the cache's behavior, not the cache its
 I have split the project into three parts:
 
 1. a Parser module,
-2. a simlulation core module, and
+2. a simulation core module, and
 3. a reporter module
 
 Each module adds more freatures on top of previous ones, so it is imperative that
@@ -44,7 +44,7 @@ team must submit a progress report and its source code.
 1. **Submission Dates**
   - Your team can find these at the top of this document.
 2. **Project Goals:**
-  - Create a good teamwork enviroment.
+  - Create a good teamwork environment.
   - Get familiar with software engineering practices.
   - Work with Object-Oriented programming in C++.
   - Be more knowledgeable in cache technology.
@@ -91,7 +91,7 @@ In addition, you will be provided with three items:
 
 1. a sample memory trace that is short, about 100 lines
   - we can use this small trace to test our development
-2. a big race so we can check for performance and consistency
+2. a big trace so we can check for performance and consistency
 3. a template c++ file
 
 ## Part 1 - Due on 03/13/2015 11:59 PM
@@ -99,7 +99,7 @@ In addition, you will be provided with three items:
 What is wanted for this part of the project is the following items:
 
 - the program should be able to parse the input trace file
-- the program should be able to acccpet the following parameters:
+- the program should be able to accept the following parameters:
   - `-sizeL1 xx` *The size of the L1 cache in bytes. It should validate a power of 2*
   - `-sizeL2 xx` *The size of the L2 cache in bytes. It should validate a power of 2, and it should be bigger than L1*
   - `-type direct/full` *Identifies the cache type*

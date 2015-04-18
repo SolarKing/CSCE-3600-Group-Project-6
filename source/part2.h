@@ -49,11 +49,11 @@ void initIntArray(int array[], int array_size, int value);
 
 /**
  * Find the cache line position for a specific address passed in as a hexadecimal number
- * @param  base12      A hexadecimal address
+ * @param  addr      An address
  * @param  cache_lines The number of lines in the cache (see findCacheLines())
  * @return             Returns the line position
  */
-int getLinePos(int base12, int cache_lines);
+int getLinePos(int addr, int cache_lines);
 
 /**
  * Initialize the values of a type std::string array to a specified string
@@ -71,3 +71,5 @@ void initStringArray(std::string array[], int array_size, std::string value);
  */
 float getPercentage(int value, int total);
 
+
+int getCacheLine(int addr, int tag_size, int bit_block_size);

@@ -6,8 +6,6 @@
 #include <cstdlib>
 #include <string>
 #include <bitset>
-#include <unistd.h> // for sleep()
-
 
 int main(int argc, char const *argv[])
 {
@@ -160,10 +158,11 @@ int main(int argc, char const *argv[])
   // int cacheSize = 32768;
   // int cacheSize = 16384;
   int cacheLines = findCacheLines(cacheSize, ADDR_SIZE);
-  int tagSize = findTagSize(ADDR_SIZE, findBitBlockSize(cacheLines), OFFSET);
+  int bitBlockSize = findBitBlockSize(cacheLines);
+  int tagSize = findTagSize(ADDR_SIZE, bitBlockSize, OFFSET);
 
   std::string *tagArray = new std::string[cacheLines];
-  initStringArray(tagArray, cacheLines, "asdf");
+  initStringArray(tagArray, cacheLines, "null");
 
   // for (int i = 0; i < cacheLines; ++i)
   // {
@@ -179,7 +178,7 @@ int main(int argc, char const *argv[])
   // }
   // 
   
-  int loadCounter;
+  int loadCounter = 0;
 
   std::cout << "Loading" << std::flush;
 
@@ -205,6 +204,8 @@ int main(int argc, char const *argv[])
     }
     loadCounter++;
 
+
+
     // std::cout << "Cache Lines: " << cacheLines << std::endl;
     std::cin >> std::hex >> y;
     // std::cout << "Hex Value:" << std::hex << y << std::endl;
@@ -217,24 +218,46 @@ int main(int argc, char const *argv[])
     // std::cout << "Tag Value: " << tagValue << std::endl << std::endl;
 
 
-    if (x == 0) 
+    if (x == 1) 
     {
       traceFile.addARead();
-      if (tagArray[getLinePos(y, cacheLines)] == tagValue && validArray[getLinePos(y, cacheLines)] == true)
+      if (tagArray[getLinePos(y, cacheLines)] == tagValue)
       {
         numOfHits++;
+        // std::cout << getLinePos(y, cacheLines) << " ";
+        // std::cout << tagArray[getLinePos(y, cacheLines)] << "==" << tagValue << std::endl;
+        // std::cout << "HIT!" << std::endl;
       }
       else
       {
+        // std::cout << getLinePos(y, cacheLines) << " ";
+        // std::cout << tagArray[getLinePos(y, cacheLines)] << "!=" << tagValue << std::endl;
         tagArray[getLinePos(y, cacheLines)] = tagValue;
         numOfMisses++;
+        // std::cout << "MISS!" << std::endl;
       }
+
     }
-    else if (x == 1)
+    else if (x == 0)
     {
+
       traceFile.addAWrite();
-      tagArray[getLinePos(y, cacheLines)] = tagValue;
-      validArray[getLinePos(y, cacheLines)] = true;
+      if (tagArray[getLinePos(y, cacheLines)] == tagValue)
+      {
+        numOfHits++;
+        validArray[getLinePos(y, cacheLines)] = true;
+        // std::cout << getLinePos(y, cacheLines) << " ";
+        // std::cout << tagArray[getLinePos(y, cacheLines)] << "==" << tagValue << std::endl;
+        // std::cout << "HIT!" << std::endl;
+      }
+      else
+      {
+        // std::cout << getLinePos(y, cacheLines) << " ";
+        // std::cout << tagArray[getLinePos(y, cacheLines)] << "!=" << tagValue << std::endl;
+        tagArray[getLinePos(y, cacheLines)] = tagValue;
+        numOfMisses++;
+        // std::cout << "MISS!" << std::endl;
+      }
     }
     else
     {
@@ -246,7 +269,7 @@ int main(int argc, char const *argv[])
     // std::cout << "debug: The x is " << x << " and y is " << y << std::endl;
   }
   std::cout << "\b\b\b\b\b\b\b\b\b\bLoading Done!" << std::endl;
-  std::cout << "--------------------------------------------------------------------------------" << std::endl;
+  std::cout << "-------------------------------------------------------------" << std::endl;
   std::cout << "Memory refreneces read from file:" << std::endl;
   std::cout << traceFile.getTotal() << " Total" << std::endl;
   std::cout << traceFile.getNumOfReads() << " Reads" << std::endl;
@@ -257,11 +280,11 @@ int main(int argc, char const *argv[])
   //   std::cout << tagArray[i] << " " << validArray[i] << std::endl;
   // }
 
-  // std::cout << "Hits: " << numOfHits << std::endl;
+  // std::cout << "  Hits: " << numOfHits << std::endl;
   // std::cout << "Misses: " << numOfMisses << std::endl << std::endl;
-  std::cout << "--------------------------------------------------------------------------------" << std::endl;
-  std::cout << "  Hits: " << getPercentage(numOfHits, numOfHits+numOfMisses) << "\%" <<std::endl;
-  std::cout << "Misses: " << getPercentage(numOfMisses, numOfHits+numOfMisses) <<  "\%" << std::endl;
+  std::cout << "-------------------------------------------------------------" << std::endl;
+  std::cout << "  Hits: " << getPercentage(numOfHits, numOfHits+numOfMisses) << " \%" <<std::endl;
+  std::cout << "Misses: " << getPercentage(numOfMisses, numOfHits+numOfMisses) <<  " \%" << std::endl << std::endl;
  
   return 0;
 }

@@ -14,7 +14,7 @@ To compile this source code, you can do one of the following:
 - run the bash script "compile.sh" included in the zip of the source code
 or
 - enter the following command into the shell:
-    g++ main.cpp parse.cpp -o parse
+    g++ main.cpp parse.cpp part2.cpp -o parse
 
 HOW TO RUN THE PROGRAM
 

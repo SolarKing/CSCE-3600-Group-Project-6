@@ -68,13 +68,13 @@ void initIntArray(int array[], int array_size, int value)
  * @param  cache_lines The number of lines in the cache (see findCacheLines())
  * @return             Returns the line position
  */
-int getLinePos(int base12, int cache_lines)
+int getLinePos(int addr, int cache_lines)
 {
-  int base10 = 0;
-  std::stringstream stream;
-  stream << base12;
-  stream >> std::dec >> base10;
-  return base10 % cache_lines;
+  unsigned long int i = 0;
+  i = (unsigned long int)addr;
+  i = i >> OFFSET;
+  // std::cout << i % cache_lines << std::endl;
+  return (int)i % cache_lines;
 }
 
 /**
@@ -105,4 +105,10 @@ float getPercentage(int value, int total)
   return value / (float)total * 100;
 }
 
-
+int getCacheLine(int addr, int tag_size, int bit_block_size)
+{
+  unsigned long int i = 0;
+  i = (unsigned long int)addr;
+  i = i >> OFFSET;
+  return (int)i;
+}

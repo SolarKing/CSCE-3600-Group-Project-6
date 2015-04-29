@@ -1,63 +1,77 @@
-#include <iostream>
-#include <cstdlib>
-#include <math>
+#include "test.h"
 
-static const int ADDR_SIZE = 32; // Address size will always be 32 bits
-static const int OFFSET = 5; // Offset size will always be 5 bits
-
-/**
-* USAGE: int cache_lines = findCacheLines(argv[2], ADDR_SIZE);
-*/
-int findCacheLines(int cache_size, int addr_size)
+int main(int argc, char const *argv[])
 {
- 	return cache_size / addr_size; 
-}
 
-/**
-* USAGE: int bit_addr = findBitAddress(cache_lines);
-* USAGE: int bit_addr = findBitAddress(findCacheLines(argv[2], ADDR_SIZE));
-*/
-int findBitAddress(int cache_lines)
-{
- 	return  log2(cache_lines);
-}
+  int miss = 0;
+  int hit = 0;
 
-/**
-* USAGE: int tag_size = findTagSize(ADDR_SIZE, bit_bAddr, OFFSET);
-*/
-int findTagSize(int addr_size, int bit_addr, int offset)
-{
- 	return addr_size - bit_addr - offset; 
-}
+  int insertCounter = 0;
+  int scanCounter = 0;
 
-void initValidArray(bool array[]) // Initializing the value of the Valid Array
-{
-  for (int i = 0; i < 10; i++)
+  std::string testCache[10];
+  std::string traceFile[20] = {
+    "1",
+    "2",
+    "1",
+    "9",
+    "3",
+    "1",
+    "4",
+    "7",
+    "6",
+    "8",
+    "5",
+    "3",
+    "13",
+    "14",
+    "15",
+    "1",
+    "2",
+    "1",
+    "15",
+    "1",
+  };
+
+  for (int i = 0; i < 20; ++i)
   {
-	 array[i] = false;
+    std::cout << traceFile[i] << std::endl;
   }
-}
 
-void initTagArray(int array[], int tagSize) // Initializing the values of the Tag Array, must past in the size as a parameter
-{
-	for (for i = 0; i < tagSize; i++)
-}
+  for (int i = 0; i < 10; ++i)
+  {
+    testCache[i] = "null";
+    std::cout << testCache[i] << std::endl;
+  }
 
-int main()
-{
-  	int tagArray[10]; // The array for the tag binary or hexidecimal
-    bool validArray[10]; // The array for the valid bits
-  
-  	int tagSize = 0; //
-
-  	initValidArray(validArray);
-  
-    for (int i = 0; i < 10; i++)
+  // FIFO algorithm
+  int hitChecker;
+  for (int i = 0; i < 20; ++i)
+  {
+    hitChecker = scanCache(traceFile[i], testCache, 10);
+    if (hitChecker < 0) 
     {
-       std::cout << validArray[i] << std::endl; // Check the values of what's currently in the array
+      if (insertCounter >= 10)
+      {
+        insertCounter = 0;
+      }
+      std::cout << "There was a miss. Inserting ";
+      std::cout << traceFile[i] << " into cache line ";
+      std::cout << insertCounter << std::endl;
+
+      testCache[insertCounter++] = traceFile[i];
+      miss++;
     }
- 
+    else if (hitChecker > -1)
+    {
+      std::cout << "There was a hit! Found value ";
+      std::cout << testCache[hitChecker] << " in cache line ";
+      std::cout << hitChecker << std::endl;
+      hit++;
+    }
+  }
+
+
+  std::cout << "This is working" << std::endl;
   return 0;
 }
-
-http://stackoverflow.com/questions/2611764/can-i-use-a-binary-literal-in-c-or-c

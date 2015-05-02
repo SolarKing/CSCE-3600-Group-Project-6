@@ -70,6 +70,3 @@ void initStringArray(std::string array[], int array_size, std::string value);
  * @return       Return a integer of the percentage
  */
 float getPercentage(int value, int total);
-
-
-int getCacheLine(int addr, int tag_size, int bit_block_size);

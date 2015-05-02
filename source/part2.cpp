@@ -104,11 +104,3 @@ float getPercentage(int value, int total)
   // std::cout << "Result: " << value / (float)total << std::endl;
   return value / (float)total * 100;
 }
-
-int getCacheLine(int addr, int tag_size, int bit_block_size)
-{
-  unsigned long int i = 0;
-  i = (unsigned long int)addr;
-  i = i >> OFFSET;
-  return (int)i;
-}

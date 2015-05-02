@@ -7,9 +7,16 @@
 #include <string>
 #include <bitset>
 
+
 int main(int argc, char const *argv[])
 {
+
   Parse traceFile; // this will handle the tracefile
+
+  // determines replacement policy in program flow // defaults to direct
+  std::string replacementPolicy = "direct";
+
+
 
   // storage for the trace file into "main memory"
 
@@ -22,11 +29,12 @@ int main(int argc, char const *argv[])
 
   if (argc > 1)
   {
-    std::cout << "Input Parameters read:" << std::endl;
+    std::cout << "\nInput Parameters read:" << std::endl;
   }
   else
   {
     std::cout << "No input parameters were read..." << std::endl;
+    return 1;
   }
 
   for (int i = 1; i < argc; i++)
@@ -53,7 +61,7 @@ int main(int argc, char const *argv[])
 
       // expected output from entering "-sizeL1 xx" arguments
       std::cout << "SizeL1 " << argv[i] << std::endl;
-      cacheSize = std::stoi(argv[i]);
+      cacheSize = std::atoi(argv[i]);
 
 
       // std::cout << "debug: entered into argument -sizeL1 condition" << std::endl;
@@ -97,11 +105,13 @@ int main(int argc, char const *argv[])
       if ((argv[i+1] == std::string("direct")))
       {
         std::cout << "Type Direct" << std::endl;
+        replacementPolicy = "direct";
         i++;
       }
       else if ((argv[i+1] == std::string("full")))
       {
         std::cout << "Type Full" << std::endl;
+        replacementPolicy = "full";
         i++;
       }
       else
@@ -150,6 +160,12 @@ int main(int argc, char const *argv[])
   // PARSING / PROGRAM FLOW //
   ////////////////////////////
 
+  // mayur
+  
+
+  
+  // 
+
   int numOfHits = 0;
   int numOfMisses = 0;
 
@@ -161,16 +177,28 @@ int main(int argc, char const *argv[])
   int bitBlockSize = findBitBlockSize(cacheLines);
   int tagSize = findTagSize(ADDR_SIZE, bitBlockSize, OFFSET);
 
-  std::string *tagArray = new std::string[cacheLines];
-  initStringArray(tagArray, cacheLines, "null");
+  Cache cacheLinesL1(cacheLines);
+
+  // need to change cacheLines into cacheLinesL1
+  std::string *tagArrayL1 = new std::string[cacheLines];
+  initStringArray(tagArrayL1, cacheLines, "null");
+
+  // need to change cacheLines into cacheLinesL2
+  std::string *tagArrayL2 = new std::string[cacheLines];
+  initStringArray(tagArrayL2, cacheLines, "null");
 
   // for (int i = 0; i < cacheLines; ++i)
   // {
   //   std::cout << tagArray[i] << std::endl;
   // }
 
-  bool *validArray = new bool[cacheLines];
-  initBoolArray(validArray,  cacheLines, false);
+  // need to change cacheLines into cacheLinesL1
+  bool *validArrayL1 = new bool[cacheLines];
+  initBoolArray(validArrayL1,  cacheLines, false);
+
+  // need to change cacheLines into cacheLinesL2
+  bool *validArrayL2 = new bool[cacheLines];
+  initBoolArray(validArrayL2,  cacheLines, false);
 
   // for (int i = 0; i < cacheLines; ++i)
   // {
@@ -186,25 +214,7 @@ int main(int argc, char const *argv[])
   {
 
     // loading animation
-    if (loadCounter % 100000 == 25000)
-    {
-      std::cout << "." << std::flush;
-    }
-    else if (loadCounter % 100000 == 50000)
-    {
-      std::cout << "." << std::flush;
-    }
-    else if (loadCounter % 100000 == 75000)
-    {
-      std::cout << "\b\b\b   \b\b\b" << std::flush;
-    }
-    else if (loadCounter % 100000 == 0)
-    {
-      std::cout << "." << std::flush;
-    }
-    loadCounter++;
-
-
+    loadAnimation(loadCounter);
 
     // std::cout << "Cache Lines: " << cacheLines << std::endl;
     std::cin >> std::hex >> y;
@@ -218,7 +228,7 @@ int main(int argc, char const *argv[])
     // std::cout << "Tag Value: " << tagValue << std::endl << std::endl;
 
 
-    if (x == 1) 
+    if (x == 1) // Check to see if read 
     {
       traceFile.addARead();
       if (tagArray[getLinePos(y, cacheLines)] == tagValue)
@@ -238,7 +248,7 @@ int main(int argc, char const *argv[])
       }
 
     }
-    else if (x == 0)
+    else if (x == 0)  // Check to see if write 
     {
 
       traceFile.addAWrite();

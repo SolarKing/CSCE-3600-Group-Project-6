@@ -3,7 +3,7 @@
 echo ""
 echo "Compiling the program..."
 
-g++ main.cpp parse.cpp part2.cpp -o test
+g++ main.cpp parse.cpp part2.cpp -o project
 
 echo "Finished compiling..."
 echo ""

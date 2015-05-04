@@ -161,9 +161,17 @@ int main(int argc, char const *argv[])
   ////////////////////////////
 
   // mayur
-  
-
-  
+  if(replacementPolicy=="direct")
+  {
+      //code
+  }
+else if(replacementPolicy=="full")
+{
+  //code
+}
+  else{
+    return 1;
+  }
   // 
 
   int numOfHits = 0;

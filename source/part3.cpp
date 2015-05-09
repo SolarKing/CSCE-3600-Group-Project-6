@@ -2,11 +2,13 @@
 
 Cache::Cache(int cacheLines)
 {
-  *tagArray = new std::string[cacheLines];
+  isScanned = false;
+
+  tagArray = new std::string[cacheLines];
   initStringArray(tagArray, cacheLines, "null");
 
-  *validArray = new bool[cacheLines];
-  initBoolArray(validArrayL1,  cacheLines, false);
+  validArray = new bool[cacheLines];
+  initBoolArray(validArray,  cacheLines, false);
 }
 
 void loadAnimation(int &loadCounter)
@@ -42,3 +44,8 @@ int scanCache(std::string value, std::string array[], int arraySize)
   }
   return -1;
 }
+
+
+
+
+

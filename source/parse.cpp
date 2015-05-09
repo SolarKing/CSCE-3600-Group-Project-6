@@ -35,15 +35,16 @@ int Parse::addAWrite()
   return ++nWrites;
 }
 
-int Parse::getArguments(int argc, char const *argv[])
+int Parse::getArguments(int argc, char const *argv[], int &cacheSizeL1, int &cacheSizeL2, std::string &replacementPolicy)
 {
   if (argc > 1)
   {
-    std::cout << "Input Parameters read:" << std::endl;
+    std::cout << "\nInput Parameters read:" << std::endl;
   }
   else
   {
     std::cout << "No input parameters were read..." << std::endl;
+    return 1;
   }
 
   for (int i = 1; i < argc; i++)
@@ -70,6 +71,8 @@ int Parse::getArguments(int argc, char const *argv[])
 
       // expected output from entering "-sizeL1 xx" arguments
       std::cout << "SizeL1 " << argv[i] << std::endl;
+      cacheSizeL1 = std::atoi(argv[i]);
+
 
       // std::cout << "debug: entered into argument -sizeL1 condition" << std::endl;
     }
@@ -94,6 +97,7 @@ int Parse::getArguments(int argc, char const *argv[])
 
       // print expected output from entering "-sizeL2 xx" arguments
       std::cout << "SizeL2 " << argv[i] << std::endl;
+      cacheSizeL2 = std::atoi(argv[i]);
 
       // std::cout << "debug: entered into argument -sizeL2 condition" << std::endl;
     }
@@ -112,11 +116,13 @@ int Parse::getArguments(int argc, char const *argv[])
       if ((argv[i+1] == std::string("direct")))
       {
         std::cout << "Type Direct" << std::endl;
+        replacementPolicy = "direct";
         i++;
       }
       else if ((argv[i+1] == std::string("full")))
       {
         std::cout << "Type Full" << std::endl;
+        replacementPolicy = "full";
         i++;
       }
       else
@@ -156,6 +162,7 @@ int Parse::getArguments(int argc, char const *argv[])
         std::cout << "Exiting Program..." << std::endl;
         return 1;
       }
+
       // std::cout << "debug: entered into argument -write-policy condition" << std::endl;
     }
   }

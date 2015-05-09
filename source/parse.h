@@ -66,7 +66,7 @@ public:
    * @param  argv The arguments to be read
    * @return      Returns 1 for faliure, otherwise return 0
    */
-  int getArguments(int argc, char const *argv[]);
+  int getArguments(int argc, char const *argv[], int &cacheSizeL1, int &cacheSizeL2, std::string &replacementPolicy);
 };
 
 // #endif

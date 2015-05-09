@@ -2,6 +2,7 @@
 #include <string>
 #include <cstdlib>
 #include <cmath>
+#include <string>
 
 /**
  * If the return value is more than -1, then the scan produces

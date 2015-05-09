@@ -3,6 +3,8 @@
 #include <cstdlib>
 #include <cmath>
 
+#include "part2.h"
+
 /**
  * This is a class for cache
  */
@@ -10,12 +12,13 @@ class Cache
 {
   public:
     Cache(int cacheLines);
-    bool isScanned = false;
+    // todo: save # cachelines in this class
+    bool isScanned;
     // tag array
     std::string *tagArray;
 
     // valid array
-    int *validArray;
+    bool *validArray;
 };
 
 /**

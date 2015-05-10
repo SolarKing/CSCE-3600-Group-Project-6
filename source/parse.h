@@ -4,6 +4,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <cstdlib>
 
 /**
  * This class stores the number of reads and writes, within

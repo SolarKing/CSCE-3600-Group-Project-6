@@ -72,7 +72,7 @@ int Parse::getArguments(int argc, char const *argv[], int &cacheSizeL1, int &cac
 
       // expected output from entering "-sizeL1 xx" arguments
       std::cout << "  SizeL1 " << argv[i] << std::endl;
-      cacheSizeL1 = std::atoi(argv[i]);
+      cacheSizeL1 = atoi(argv[i]);
 
 
       // std::cout << "debug: entered into argument -sizeL1 condition" << std::endl;
@@ -98,7 +98,7 @@ int Parse::getArguments(int argc, char const *argv[], int &cacheSizeL1, int &cac
 
       // print expected output from entering "-sizeL2 xx" arguments
       std::cout << "  SizeL2 " << argv[i] << std::endl;
-      cacheSizeL2 = std::atoi(argv[i]);
+      cacheSizeL2 = atoi(argv[i]);
 
       // std::cout << "debug: entered into argument -sizeL2 condition" << std::endl;
     }

@@ -13,5 +13,5 @@ ls -1 | grep '.trace\|.tr'
 
 echo ""
 echo "To run the program:"
-echo "./parse [OPTIONS] < YOUR_TRACE_FILE.trace"
+echo "./project [OPTIONS] < YOUR_TRACE_FILE.trace"
 echo ""

@@ -14,7 +14,7 @@ To compile this source code, you can do one of the following:
 - run the bash script "compile.sh" included in the zip of the source code
 or
 - enter the following command into the shell:
-    g++ main.cpp parse.cpp part2.cpp -o project
+    g++ main.cpp parse.cpp part2.cpp part3.cpp -o project
 
 HOW TO RUN THE PROGRAM
 
@@ -26,9 +26,9 @@ program, execute the program with one or more of these arguments:
 
 ARGUEMENTS
 
--sizeL1 [XX]    (where xx is a positive integer)
+-sizeL1 [XX]    (where XX is a positive integer)
 
--sizeL2 [XX]    (where xx is a positive integer)
+-sizeL2 [XX]    (where XX is a positive integer)
 
 -type [OPTION]
         direct
@@ -44,4 +44,5 @@ LIST OF FEATURES
 - Proprogates electrons through digital logic to perform miscellaneous tasks.
 - Uses at least one semi-colon.
 - Direct cache implmentation.
+- Fully Associative cache implementation
 

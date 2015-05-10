@@ -37,9 +37,10 @@ int Parse::addAWrite()
 
 int Parse::getArguments(int argc, char const *argv[], int &cacheSizeL1, int &cacheSizeL2, std::string &replacementPolicy)
 {
+  std::cout << "=============================================================" << std::endl;
   if (argc > 1)
   {
-    std::cout << "\nInput Parameters read:" << std::endl;
+    std::cout << "Input Parameters read:" << std::endl;
   }
   else
   {
@@ -70,7 +71,7 @@ int Parse::getArguments(int argc, char const *argv[], int &cacheSizeL1, int &cac
       }
 
       // expected output from entering "-sizeL1 xx" arguments
-      std::cout << "SizeL1 " << argv[i] << std::endl;
+      std::cout << "  SizeL1 " << argv[i] << std::endl;
       cacheSizeL1 = std::atoi(argv[i]);
 
 
@@ -96,7 +97,7 @@ int Parse::getArguments(int argc, char const *argv[], int &cacheSizeL1, int &cac
       }
 
       // print expected output from entering "-sizeL2 xx" arguments
-      std::cout << "SizeL2 " << argv[i] << std::endl;
+      std::cout << "  SizeL2 " << argv[i] << std::endl;
       cacheSizeL2 = std::atoi(argv[i]);
 
       // std::cout << "debug: entered into argument -sizeL2 condition" << std::endl;
@@ -115,13 +116,13 @@ int Parse::getArguments(int argc, char const *argv[], int &cacheSizeL1, int &cac
       // handle if there is a valid command entered after -type
       if ((argv[i+1] == std::string("direct")))
       {
-        std::cout << "Type Direct" << std::endl;
+        std::cout << "  Type Direct" << std::endl;
         replacementPolicy = "direct";
         i++;
       }
       else if ((argv[i+1] == std::string("full")))
       {
-        std::cout << "Type Full" << std::endl;
+        std::cout << "  Type Full" << std::endl;
         replacementPolicy = "full";
         i++;
       }
@@ -148,12 +149,12 @@ int Parse::getArguments(int argc, char const *argv[], int &cacheSizeL1, int &cac
       // handle if there is a valid command entered after -type
       if ((argv[i+1] == std::string("through")))
       {
-        std::cout << "Write-Policy Through" << std::endl;
+        std::cout << "  Write-Policy Through" << std::endl;
         i++;
       }
       else if ((argv[i+1] == std::string("back")))
       {
-        std::cout << "Write-Policy Back" << std::endl;
+        std::cout << "  Write-Policy Back" << std::endl;
         i++;
       }
       else

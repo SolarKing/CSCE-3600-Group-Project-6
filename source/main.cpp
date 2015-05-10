@@ -36,6 +36,8 @@ int main(int argc, char const *argv[])
 
   traceFile.getArguments(argc, argv, cacheSizeL1, cacheSizeL2, replacementPolicy);
 
+  std::cout << "-------------------------------------------------------------" << std::endl; 
+
   // int cacheSize = 32768;
   // int cacheSize = 16384;
   int cacheLinesL1 = findCacheLines(cacheSizeL1, ADDR_SIZE);
@@ -45,8 +47,8 @@ int main(int argc, char const *argv[])
   int tagSizeL1 = findTagSize(ADDR_SIZE, bitBlockSizeL1, OFFSET);
   int tagSizeL2 = findTagSize(ADDR_SIZE, bitBlockSizeL2, OFFSET);
 
-  Cache cacheL1(cacheLinesL1); // instance of cacheL1
-  Cache cacheL1(cacheLinesL2); // instance of cacheL1
+  Cache CacheL1(cacheLinesL1); // instance of CacheL1
+  Cache CacheL2(cacheLinesL2); // instance of CacheL1
 
   ////////////////////////////
   // PARSING / PROGRAM FLOW //
@@ -59,81 +61,67 @@ int main(int argc, char const *argv[])
   {
     while (std::cin >> x) // credit to epstein
     {
-
     // loading animation
     loadAnimation(loadCounter);
-
-    // std::cout << "Cache Lines: " << cacheLines << std::endl;
-      std::cin >> std::hex >> y;
-    // std::cout << "Hex Value:" << std::hex << y << std::endl;
-    // std::cout << "Decimal Value: " << std::dec << y << std::endl;
-    // std::cout << "Binary Value: " << std::bitset<ADDR_SIZE>(y).to_string() << std::endl;
-
-      
-    // std::cout << "The LinePos is " << getLinePos(y, cacheLines) << std::endl;
-    // std::cout << "Tag Size: " << tagSize << std::endl;
-    // std::cout << "Tag Value: " << tagValue << std::endl << std::endl;
-
-
-    if (x == 1) // Check to see if read 
-    {
-      traceFile.addARead();
-      tagValue = std::bitset<ADDR_SIZE>(y).to_string().substr(0, tagSizeL1);
-      if (cacheL1.tagArray[getLinePos(y, cacheLinesL1)] == tagValue)
+    std::cin >> std::hex >> y; // get the address from the trace file
+    
+      // determine if it is a read or write
+      if (x == 0) // if a write
       {
-        numOfHits++;
-        // std::cout << getLinePos(y, cacheLines) << " ";
-        // std::cout << cacheL1.tagArray[getLinePos(y, cacheLines)] << "==" << tagValue << std::endl;
-        // std::cout << "HIT!" << std::endl;
+        traceFile.addAWrite();
+      }
+      else if (x == 1)
+      {
+        // add a read
+        traceFile.addARead();
       }
       else
       {
-        // std::cout << getLinePos(y, cacheLines) << " ";
-        // std::cout << cacheL1.tagArray[getLinePos(y, cacheLines)] << "!=" << tagValue << std::endl;
-        cacheL1.tagArray[getLinePos(y, cacheLinesL1)] = tagValue;
-        numOfMisses++;
-        // std::cout << "MISS!" << std::endl;
-        tagValue = std::bitset<ADDR_SIZE>(y).to_string().substr(0, tagSizeL2);
-        if (cacheL1.tagArray[getLinePos(y, cacheLinesL2)] == tagValue)
+        // error when reading the file
+        std::cout << "Error: Could not determine if read/write. Exiting Program";
+        std::cout << std::endl;
+        // exit program with error code
+        return 1;
+      }
+
+      // handling the tag value
+      tagValue = std::bitset<ADDR_SIZE>(y).to_string().substr(0, tagSizeL1);
+      if (CacheL1.getTag(getLinePos(y, cacheLinesL1)) == tagValue)
+      {
+        // mark as a hit
+        CacheL1.addHit();
+      }
+      else
+      {
+        // mark as a miss
+        CacheL1.addMiss();
+        // insert tag into level 1 tag array
+        CacheL1.insertTag(tagValue, getLinePos(y, cacheLinesL1));
+        // if a write, then update validArray for the cache
+        if (x == 0)
         {
-          numOfHits++;
+          CacheL1.updateValid(getLinePos(y, cacheLinesL1)); // create a function for this
+        }
+
+        tagValue = std::bitset<ADDR_SIZE>(y).to_string().substr(0, tagSizeL2);
+        if(CacheL2.getTag(getLinePos(y, cacheLinesL2)) == tagValue)
+        {
+          // mark as a cache level 2 hit
+          CacheL2.addHit();
         }
         else
-        {
-
+        {       
+          // mark as a cache level 2 miss
+          CacheL2.addMiss();
+          // insert tag into level 2 tagArray
+          CacheL2.insertTag(tagValue, getLinePos(y, cacheLinesL2));
+          // if a write, then update validArray for the cache
+          if(x == 0)
+          {
+            CacheL1.updateValid(getLinePos(y, cacheLinesL1));
+          }
         }
       }
-
-    }
-    else if (x == 0)  // Check to see if write 
-    {
-
-      traceFile.addAWrite();
-      if (cacheL1.tagArray[getLinePos(y, cacheLinesL1)] == tagValue)
-      {
-        numOfHits++;
-        cacheL1.validArray[getLinePos(y, cacheLinesL1)] = true;
-        // std::cout << getLinePos(y, cacheLines) << " ";
-        // std::cout << cacheL1.tagArray[getLinePos(y, cacheLines)] << "==" << tagValue << std::endl;
-        // std::cout << "HIT!" << std::endl;
-      }
-      else
-      {
-        // std::cout << getLinePos(y, cacheLines) << " ";
-        // std::cout << cacheL1.tagArray[getLinePos(y, cacheLines)] << "!=" << tagValue << std::endl;
-        cacheL1.tagArray[getLinePos(y, cacheLinesL1)] = tagValue;
-        numOfMisses++;
-        // std::cout << "MISS!" << std::endl;
-      }
-    }
-    else
-    {
-      std::cout << "Error: Something went wrong when reading the trace file" << std::endl;
-      std::cout << "Exiting Program..." << std::endl;
-      return 1;
-    }
-
-    // std::cout << "debug: The x is " << x << " and y is " << y << std::endl;
   }
 }
 else if (replacementPolicy=="full")
@@ -143,187 +131,106 @@ else if (replacementPolicy=="full")
   int insertCounterL1 = 0; // used for FIFO algorithm
   int insertCounterL2 = 0; // used for FIFO algorithm
 
-  // code
   while (std::cin >> x)
   {
-    // start loading animimation
+    // start loading animation
     loadAnimation(loadCounter);
-    // 
+    // get the addr from the trace
     std::cin >> std::hex >> y;
 
-    tagValue = std::bitset<ADDR_SIZE>(y).to_string().substr(0, tagSizeL1);
-    int linePosL1 = scanCache(tagValue, cacheL1.tagArray, cacheLinesL1);
-
-    tagValue = std::bitset<ADDR_SIZE>(y).to_string().substr(0, tagSizeL2);
-    int linePosL2 = scanCache(tagValue, cacheL1.tagArray, cacheLinesL2);
-
-    if (linePosL1 < 0 && linePosL2 < 0)
+    // check for read and writes
+    if (x == 0) // if a write
     {
-      // miss
-      numOfMisses++;
-      std::cout << "debug: added a miss" << std::endl;
+      traceFile.addAWrite();
+    }
+    else if (x == 1) // if a read
+    {
+      traceFile.addARead();
+    }
 
-      // FIFO algorithm
-
-        // debugging statements
-        // std::cout << "debug: There was a miss. Inserting ";
-        // std::cout << traceFile[i] << " into cache line ";
-        // std::cout << insertCounter << std::endl;
-
-        // determine where to put the tag
-
-        // if both are not fully scanned
-        if (!(cacheL1.isScanned) && !(cacheL1.isScanned))
-        {
-          // put into cacheL1
-          
-
-          if (x == 0) // check if write
-          {
-            traceFile.addAWrite();
-            cacheL1.validArray[insertCounterL1] = true;
-          }
-          else
-          {
-            traceFile.addARead();
-          }
-
-          cacheL1.tagArray[insertCounterL1++] = tagValue;
-
-          if (insertCounterL1 >= cacheLinesL1)
-          {
-            cacheL1.isScanned = true;
-          }
-
-        }
-        else if ((cacheL1.isScanned) && !(cacheL1.isScanned))
-        {
-          // put into cacheL1
-          tagValue = std::bitset<ADDR_SIZE>(y).to_string().substr(0, tagSizeL2);
-
-          if (x == 0) // check if write
-          {
-            traceFile.addAWrite();
-            cacheL1.validArray[insertCounterL2] = true;
-          }
-          else
-          {
-            traceFile.addARead();
-          }
-
-          cacheL1.tagArray[insertCounterL2++] = tagValue;
-
-          if (insertCounterL2 >= cacheLinesL2)
-          {
-            cacheL1.isScanned = true;
-          }
-
-        }
-        else if ((cacheL1.isScanned) && (cacheL1.isScanned))
-        {
-          // reset isScanned and put into Cache L1
-
-          insertCounterL1 = 0;
-          insertCounterL2 = 0;
-
-          cacheL1.isScanned = false;
-          cacheL1.isScanned = false;
-
-          // put into cacheL1
-          tagValue = std::bitset<ADDR_SIZE>(y).to_string().substr(0, tagSizeL1);
-
-          if (x == 0) // check if write
-          {
-            traceFile.addAWrite();
-            cacheL1.validArray[insertCounterL1] = true;
-          }
-          else
-          {
-            traceFile.addARead();
-          }
-          cacheL1.tagArray[insertCounterL1++] = tagValue;
-        }
-        else
-        {
-          std::cout << "Error: Something went wrong :C" << std::endl;
-          return -1;
-        }
+    // check for L1 hit
+    tagValue = std::bitset<ADDR_SIZE>(y).to_string().substr(0, tagSizeL1);
+    bool isFound = scanCache(tagValue, CacheL1.tagArray, cacheLinesL1);
+    // if hit, then
+    if (isFound)
+    {
+      // increment hit counter
+      CacheL1.addHit();
     }
     else
     {
-      // hit
-      if (x == 0) // add a write
+      // check if write
+      if (x == 0)
       {
-        traceFile.addAWrite();
+        // set valid bit to true  
+        CacheL1.updateValid(insertCounterL1);
+      }
+      // increment miss counter
+      CacheL1.addMiss();
+      // insert tag into cache
+      CacheL1.insertTag(tagValue, insertCounterL1++);
+      // check for insertCounter reset
+      if (insertCounterL1 >= cacheLinesL1)
+      {
+        insertCounterL1 = 0;
+      }
+      // check for L2 hit
+      tagValue = std::bitset<ADDR_SIZE>(y).to_string().substr(0, tagSizeL2);
+      isFound = scanCache(tagValue, CacheL2.tagArray, cacheLinesL2);
+      // if hit, then
+      if (isFound)
+      {
+        // increment hit counter
+        CacheL2.addHit();
       }
       else
       {
-        traceFile.addARead();
-      }
-      numOfHits++;
+        // check if write
+        if (x == 0)
+        {
+          // set valid bit to true  
+          CacheL2.updateValid(insertCounterL2);
+        }
+        // increment miss counter
+        CacheL2.addMiss();
+        // insert tag into cache
+        CacheL2.insertTag(tagValue, insertCounterL2++);
+        // check for insertCounter reset
+        if (insertCounterL2 >= cacheLinesL2)
+        {
+          insertCounterL2 = 0;
+        }
+      }   
     }
   }
-
+  // std::cout << "insertCounterL1 = " << insertCounterL1 << std::endl;
+  // std::cout << "insertCounterL2 = " << insertCounterL2 << std::endl;
 
 }
 else
 {
+  std::cout << "Error: Something went wrong... exiting program." << std::endl;
   return 1;
 }
 
-
-
-
- 
-
-  
-
-  // // need to change cacheLines into cacheLinesL1
-  // std::string *cacheL1.tagArrayL1 = new std::string[cacheLinesL1];
-  // initStringArray(cacheL1.tagArrayL1, cacheLinesL1, "null");
-
-  // // need to change cacheLines into cacheLinesL2
-  // std::string *cacheL1.tagArrayL2 = new std::string[cacheLinesL1];
-  // initStringArray(cacheL1.tagArrayL2, cacheLinesL1, "null");
-
-  // for (int i = 0; i < cacheLines; ++i)
-  // {
-  //   std::cout << cacheL1.tagArray[i] << std::endl;
-  // }
-
-  // // need to change cacheLines into cacheLinesL1
-  // bool *cacheL1.validArrayL1 = new bool[cacheLines];
-  // initBoolArray(cacheL1.validArrayL1,  cacheLines, false);
-
-  // // need to change cacheLines into cacheLinesL2
-  // bool *cacheL1.validArrayL2 = new bool[cacheLines];
-  // initBoolArray(cacheL1.validArrayL2,  cacheLines, false);
-
-  // for (int i = 0; i < cacheLines; ++i)
-  // {
-  //   std::cout << cacheL1.validArray[i] << std::endl;
-  // }
-  // 
-
-  // direct mapping starts here
-
   std::cout << "\b\b\b\b\b\b\b\b\b\bLoading Done!" << std::endl;
+
   std::cout << "-------------------------------------------------------------" << std::endl;
+
   std::cout << "Memory refreneces read from file:" << std::endl;
-  std::cout << traceFile.getTotal() << " Total" << std::endl;
-  std::cout << traceFile.getNumOfReads() << " Reads" << std::endl;
-  std::cout << traceFile.getNumOfWrites() << " Writes" << std::endl;
+  std::cout << "  " << traceFile.getTotal() << " Total" << std::endl;
+  std::cout << "  " << traceFile.getNumOfReads() << " Reads" << std::endl;
+  std::cout << "  " << traceFile.getNumOfWrites() << " Writes" << std::endl;
 
-  // for (int i = 0; i < cacheLines; ++i)
-  // {
-  //   std::cout << cacheL1.tagArray[i] << " " << cacheL1.validArray[i] << std::endl;
-  // }
-
-  // std::cout << "  Hits: " << numOfHits << std::endl;
-  // std::cout << "Misses: " << numOfMisses << std::endl << std::endl;
   std::cout << "-------------------------------------------------------------" << std::endl;
-  std::cout << "  Hits: " << getPercentage(numOfHits, numOfHits+numOfMisses) << " \%" <<std::endl;
-  std::cout << "Misses: " << getPercentage(numOfMisses, numOfHits+numOfMisses) <<  " \%" << std::endl << std::endl;
+
+  std::cout << "Simulation Execution:" << std::endl;
+  std::cout << "  L1   Hits: " << getPercentage(CacheL1.getHits(), CacheL1.getHits()+CacheL1.getMisses()) << " \%" <<std::endl;
+  std::cout << "  L1 Misses: " << getPercentage(CacheL1.getMisses(), CacheL1.getHits()+CacheL1.getMisses()) <<  " \%" << std::endl << std::endl;
+  std::cout << "  L2   Hits: " << getPercentage(CacheL2.getHits(), CacheL2.getHits()+CacheL2.getMisses()) << " \%" <<std::endl;
+  std::cout << "  L2 Misses: " << getPercentage(CacheL2.getMisses(), CacheL2.getHits()+CacheL2.getMisses()) <<  " \%" << std::endl;
+
+  std::cout << "=============================================================" << std::endl;
 
   return 0;
 }

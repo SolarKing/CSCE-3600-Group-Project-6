@@ -11,27 +11,65 @@
 class Cache
 {
   public:
-    Cache(int cacheLines);
-    // todo: save # cachelines in this class
+    // VARIABLES
+    std::string *tagArray; // tag array
+    bool *validArray; // valid array
     bool isScanned;
-    // tag array
-    std::string *tagArray;
+    int hit; // keeps track of the number of hits in the cache
+    int miss; // keeps track of the number of misses in the cache
+    // CONSTRUCTORS
+    Cache(int cacheLines);
+    // METHODS
+    /**
+     * This increments the hit counter of the cache
+     */
+    void addHit();
+    /**
+     * This increments this miss counter of the cache
+     */
+    void addMiss();
+    /**
+     * This gets the value of the hit counter for the cache
+     * @return Integer value of the hit counter
+     */
+    int getHits();
+    /**
+     * This gets the value of the miss counter for the cache
+     * @return Integer value of the miss counter
+     */
+    int getMisses();
+    /**
+     * This inserts the tag into a specified position into
+     * the cache's tagArray
+     * @param tag    The tag to be inserted
+     * @param tagPos The position of insertion 
+     */
+    void insertTag(std::string tag, int tagPos);
+    /**
+     * This will get the tag from a specified postion of the
+     * cache's tagArray
+     * @param  pos position where the tag will be found
+     * @return     The tag itself (string)
+     */
+    std::string getTag(int pos);
 
-    // valid array
-    bool *validArray;
+    /**
+     * This update the valid bit of this cache's validArray
+     * @param   pos     Position where the valide bit
+     *                  will be found
+     */
+    void updateValid(int pos);
 };
 
 /**
- * If the return value is more than -1, then the scan produces
- * a hit and returns the position in cache where the hit was found.
- * Otherwise, the return value is -1 and there was a miss.
- * @param  value     Value to check
- * @param  array     Pass in cache
- * @param  arraySize cache lines 
- * @return           -1 if miss
- *                   hit if > -1
+ * This scans an array for a specific string.
+ * @param  value     The string to search for in the array
+ * @param  array     The array to search
+ * @param  arraySize The size of the array 
+ * @return           True if found
+ *                   False if not found
  */
-int scanCache(std::string value, std::string array[], int arraySize);
+bool scanCache(std::string value, std::string array[], int arraySize);
 
 
 void loadAnimation(int &loadCounter);

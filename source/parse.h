@@ -63,9 +63,12 @@ public:
   /**
    * This gets the arguments passed into the command line and stores
    * the value within an instance of the Parse class. 
-   * @param  argc Number of arguments to be read
-   * @param  argv The arguments to be read
-   * @return      Returns 1 for faliure, otherwise return 0
+   * @param  argc  Number of arguments to be read
+   * @param  argv  The arguments to be read
+   * @param  cacheSizeL1  size of cache level 1
+   * @param  cacheSizeL1  size of cache level 2
+   * @param  replacementPolicy  direct or full
+   * @return Returns 1 for faliure, otherwise return 0
    */
   int getArguments(int argc, char const *argv[], int &cacheSizeL1, int &cacheSizeL2, std::string &replacementPolicy);
 };
